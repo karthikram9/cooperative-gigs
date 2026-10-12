@@ -1,0 +1,43 @@
+#!/bin/sh
+# Maven Wrapper launcher
+# Downloads Apache Maven on first use; Maven does not need to be installed globally.
+
+BASE_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+PROPERTIES_FILE="$BASE_DIR/.mvn/wrapper/maven-wrapper.properties"
+
+if [ ! -f "$PROPERTIES_FILE" ]; then
+  echo "ERROR: $PROPERTIES_FILE not found." >&2
+  exit 1
+fi
+
+MAVEN_DIST_URL="$(sed -n 's/^distributionUrl=//p' "$PROPERTIES_FILE")"
+if [ -z "$MAVEN_DIST_URL" ]; then
+  echo "ERROR: distributionUrl not found in maven-wrapper.properties." >&2
+  exit 1
+fi
+
+MAVEN_WRAPPER_HOME="${MAVEN_USER_HOME:-$HOME/.m2}/wrapper/dists"
+MAVEN_HOME="$MAVEN_WRAPPER_HOME/apache-maven-3.9.11"
+
+if [ ! -x "$MAVEN_HOME/bin/mvn" ]; then
+  ZIP="$MAVEN_WRAPPER_HOME/apache-maven-3.9.11-bin.zip"
+  mkdir -p "$MAVEN_WRAPPER_HOME"
+  echo "Downloading Apache Maven 3.9.11..."
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$MAVEN_DIST_URL" -o "$ZIP"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q "$MAVEN_DIST_URL" -O "$ZIP"
+  else
+    echo "ERROR: curl or wget is required to download Maven." >&2
+    exit 1
+  fi
+  if command -v unzip >/dev/null 2>&1; then
+    unzip -q -o "$ZIP" -d "$MAVEN_WRAPPER_HOME"
+  else
+    echo "ERROR: unzip is required to extract Maven." >&2
+    exit 1
+  fi
+  rm -f "$ZIP"
+fi
+
+exec "$MAVEN_HOME/bin/mvn" "$@"

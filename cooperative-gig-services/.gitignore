@@ -1,0 +1,14 @@
+﻿# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Build artifacts
+target/
+
+# IDE & OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db

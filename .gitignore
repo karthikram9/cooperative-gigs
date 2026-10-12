@@ -1,0 +1,13 @@
+# Local environment and secrets
+**/.env
+**/.env.*
+!**/.env.example
+
+# Generated files
+**/node_modules/
+**/dist/
+**/target/
+*.log
+
+# Local editor settings
+.vscode/
